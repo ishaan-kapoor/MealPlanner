@@ -15,13 +15,10 @@ app.use((req, res, next) => {
     next()
 })  // Logs for debugging
 
-// Tests
-app.get('/', (req, res) => {
-    res.status(200).json({ msg: "Get Working!" })
-})
-app.post('/', (req, res) => {
-    res.status(200).json({ msg: "Post Working!", data: req.body})
-})
+// Routes
+app.use('/food-item/', require('./routes/foodItem'))
+app.use('/meal/', require('./routes/meal'))
+app.use('/user/', require('./routes/user'))
 
 // Main
 mongoose.connect(DB_URI)
