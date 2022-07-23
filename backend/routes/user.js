@@ -1,10 +1,11 @@
 const router = require('express').Router()
 
-router.get('/', (req, res) => {
-    res.status(200).json({ msg: "Get user Working!" })
-})
-router.post('/', (req, res) => {
-    res.status(200).json({ msg: "Post user Working!", data: req.body})
-})
+const {
+    add_user,
+    edit_mealPlan
+} = require('../controllers/user')
+
+router.post('/', add_user)
+router.patch('/:id', edit_mealPlan)
 
 module.exports = router

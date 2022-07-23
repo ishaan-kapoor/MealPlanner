@@ -4,7 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 
 // constants
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 5000
 const DB_URI = process.env.DATABASE_URI
 
 const app = express()
@@ -16,9 +16,9 @@ app.use((req, res, next) => {
 })  // Logs for debugging
 
 // Routes
-app.use('/food-item/', require('./routes/foodItem'))
-app.use('/meal/', require('./routes/meal'))
-app.use('/user/', require('./routes/user'))
+app.use('/api/food-item/', require('./routes/foodItem'))
+app.use('/api/meal/', require('./routes/meal'))
+app.use('/api/user/', require('./routes/user'))
 
 // Main
 mongoose.connect(DB_URI)

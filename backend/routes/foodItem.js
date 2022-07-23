@@ -1,10 +1,7 @@
 const router = require('express').Router()
 
-router.get('/', (req, res) => {
-    res.status(200).json({ msg: "Get food-item Working!" })
-})
-router.post('/', (req, res) => {
-    res.status(200).json({ msg: "Post food-item Working!", data: req.body})
-})
+const add_foodItem = require('../controllers/foodItem')
+
+router.post('/', add_foodItem)
 
 module.exports = router
