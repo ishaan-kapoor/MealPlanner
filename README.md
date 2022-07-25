@@ -8,12 +8,9 @@
 * PATCH
     * /api/meal/id
     * /api/user/id
+    * /api/user/id/date
 * GET
     * /api/meal/calorieRequirement
-
-## __**NOTE**__:
-
-#### The meal recommendation will not work perfectly because the [food database](https://jtmadhavan.files.wordpress.com/2009/09/the-calorie-chart-of-indian-food.pdf) has no food item with 20-30% protein by weight of its calories. Thus, the meal made by these food items can never have the amount of protein within 20-30% by weight of the total calories.
 
 ### Example cURL commands to add/edit data
 
@@ -86,12 +83,15 @@ curl -XPOST http://localhost:5000/api/meal -H "Content-Type: application/json" -
 curl -XPOST http://localhost:5000/api/meal -H "Content-Type: application/json" -d '{"category": "Evening Snack", "name": "Veggie Snack", "foodItems": ["62dc879c708830ffb1a7d9d0", "62dc87fc708830ffb1a7d9d2", "62dc88cc708830ffb1a7d9d8"]}'
 curl -XPOST http://localhost:5000/api/meal -H "Content-Type: application/json" -d '{"category": "Evening Snack", "name": "Fruity Snack", "foodItems": ["62dc890f708830ffb1a7d9da", "62dc8946708830ffb1a7d9dc", "62dc896c708830ffb1a7d9de", "62dc89bc708830ffb1a7d9e0"]}'
 
-curl -XPOST http://localhost:5000/api/user -H "Content-Type: application/json" -d '{"name": "Ishaan", "calorieRequirement": 400, "mealPlan": [{"date": "2022-07-24T21:30:00.000Z", "meal": "62ddd1c5b556e24d18ec21d1"}]}'
-
-curl -XPATCH http://localhost:5000/api/user/62dca3b6a17aeaa773f2dfb9 -H "Content-Type: application/json" -d '{"mealPlan": [{"date": "2022-07-24T09:30:00.000+00:00", "meal": "62ddd1c4b556e24d18ec21cd"}, {"date": "2022-07-24T14:30:00.000Z", "meal": "62ddd1c4b556e24d18ec21cf"}, {"date": "2022-07-24T18:30:00.000Z", "meal": "62ddd1c5b556e24d18ec21d3"}, {"date": "2022-07-24T21:00:00.000Z", "meal": "62ddd1c5b556e24d18ec21d1"}, {"date": "2022-07-25T18:30:00.000Z", "meal": "62ddd1c6b556e24d18ec21d5"}]}'
+curl -XPOST http://localhost:5000/api/user -H "Content-Type: application/json" -d '{"name": "Ishaan", "calorieRequirement": 400, "mealPlan": [{"date": "2022-07-24", "meals": ["62ddd1c5b556e24d18ec21d1"]}]}'
 
 curl -XPATCH http://localhost:5000/api/meal/62ddd1c4b556e24d18ec21cf -H "Content-Type: application/json" -d '{"category":"Lunch"}'
 
+curl -XPATCH http://localhost:5000/api/user/62deadc8785dbbd558656121 -H "Content-Type: application/json" -d '{"mealPlan": [{"date": "2022-07-24", "meals": ["62ddd1c4b556e24d18ec21cd", "62ddd1c4b556e24d18ec21cf", "62ddd1c5b556e24d18ec21d3", "62ddd1c5b556e24d18ec21d1"]}, {"date": "2022-07-25", "meals": ["62ddd1c6b556e24d18ec21d5"]}]}'
+
+curl -XPATCH http://localhost:5000/api/user/62deadc8785dbbd558656121/2022-07-25 -H "Content-Type: application/json" -d '{"meals": ["62ddd1c6b556e24d18ec21d5", "62ddd1c5b556e24d18ec21d1"]}'
+
 curl -XGET http://localhost:5000/api/meal/400
+curl -XGET http://localhost:5000/api/meal/400 -H "Content-Type: application/json" -d '{"mealName": "random", "mealCategory": "Lunch"}'
 ```
 These might help you set up the database quicker.

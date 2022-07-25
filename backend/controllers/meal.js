@@ -30,7 +30,7 @@ function conditionSatistied(calorieRequirement, totalCalories, totalProtein) {
     return (
         ((calorieRequirement - 100 <= totalCalories) && (totalCalories <= calorieRequirement + 100))
         &&
-        ((totalCalories * 0.2 <= totalProtein) && (totalProtein <= totalCalories * 0.3))
+        ((totalCalories * 0.2 <= totalProtein * 4) && (totalProtein * 4 <= totalCalories * 0.3))
     )
 }
 
@@ -49,13 +49,8 @@ async function randomMealName() {
 }
 
 const recommend_meal = async (req, res) => {
-    // return res.status(200).json({ meal: await randomFoodItem(), msg: 0 })
-    // This will not work because the food database
-    // (https://jtmadhavan.files.wordpress.com/2009/09/the-calorie-chart-of-indian-food.pdf)
-    // has no food item with 20-30% protein by weight of its calories.
-    // Thus, the meal made by these food items can never have the amount of
-    // protein within 20-30% by weight of the total calories.
     const { calorieRequirement } = req.params
+    const { mealName, mealCategory } = req.body
     if (isNaN(calorieRequirement)) { return res.status(400).json({ err: "Invalid calorieRequirement" }) }
     try {
         let totalProtein = 0
@@ -87,7 +82,7 @@ const recommend_meal = async (req, res) => {
             //     const index = foodItems.indexOf(foodItem);
             //     foodItems.splice(index, 1)
             // }
-            // else if (totalCalories * 0.3 < totalProtein) { // High Protein
+            // else if (totalCalories * 0.3 < totalProtein * 4) { // High Protein
             //     const foodItem = foodItems.reduce((prev, curr) => (prev.protein / prev.calories) < (curr.protein / curr.calories) ? prev : curr)
             //     const { calories, protein } = foodItem
             //     totalProtein -= protein
@@ -95,7 +90,7 @@ const recommend_meal = async (req, res) => {
             //     const index = foodItems.indexOf(foodItem);
             //     foodItems.splice(index, 1)
             // }
-            // else if (totalCalories * 0.2 > totalProtein) { // Low Protein
+            // else if (totalCalories * 0.2 > totalProtein * 4) { // Low Protein
             //     const foodItem = foodItems.reduce((prev, curr) => (prev.protein / prev.calories) > (curr.protein / curr.calories) ? prev : curr)
             //     const { calories, protein } = foodItem
             //     totalProtein -= protein
@@ -105,8 +100,8 @@ const recommend_meal = async (req, res) => {
             // }
             else {
                 if (calorieRequirement + 100 < totalCalories) { foodItem = foodItems.reduce(highestCalorie) } // High Calorie
-                else if (totalCalories * 0.3 < totalProtein) { foodItem = foodItems.reduce(highestProtein_perCalorie) } // High Protein
-                else if (totalCalories * 0.2 > totalProtein) { foodItem = foodItems.reduce(lowestProtein_perCalorie) } // Low Protein
+                else if (totalCalories * 0.3 < totalProtein * 4) { foodItem = foodItems.reduce(highestProtein_perCalorie) } // High Protein
+                else if (totalCalories * 0.2 > totalProtein * 4) { foodItem = foodItems.reduce(lowestProtein_perCalorie) } // Low Protein
                 
                 const { calories, protein } = foodItem
                 totalProtein -= protein
@@ -117,7 +112,7 @@ const recommend_meal = async (req, res) => {
             i += 1
             if (i > 200) { break }
         }
-        const meal = await Meal.create({ category: randomMealCategory(), name: await randomMealName(), foodItems: foodItems.map((x) => x._id) })
+        const meal = await Meal.create({ category: mealCategory || randomMealCategory(), name: mealName || await randomMealName(), foodItems: foodItems.map((x) => x._id) })
         res.status(200).json({ meal: meal._id })
     } catch (error) {
         res.status(400).json({ err: error.message })

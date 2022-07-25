@@ -5,7 +5,7 @@ const user_schema = new mongoose.Schema({
     calorieRequirement: { type: Number, required: true },
     mealPlan: [{
         date: { type: Date, required: true},
-        meal: { type: mongoose.Schema.Types.ObjectId, ref: "Meal", required: true}
+        meals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Meal"}]
     }]
 })
 
