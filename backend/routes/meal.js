@@ -1,13 +1,17 @@
 const router = require('express').Router()
 
 const {
-    make_meal,
-    update_meal,
-    recommend_meal
+    makeMeal,
+    updateMeal,
+    recommendMeal,
+    addFoodItem,
+    removeFoodItem
 } = require('../controllers/meal')
 
-router.post('/', make_meal)
-router.patch('/:id', update_meal)
-router.get('/:calorieRequirement', recommend_meal)
+router.post('/make', makeMeal)
+router.post('/:id/add', addFoodItem)
+router.post('/:id/remove', removeFoodItem)
+router.patch('/:id/update', updateMeal)
+router.get('/recommend/:calorieRequirement', recommendMeal)
 
 module.exports = router
