@@ -10,7 +10,7 @@ const {
 
 router.post('/make', makeMeal)
 router.post('/:id/add', addFoodItem)
-router.post('/:id/remove', removeFoodItem)
+router.post('/:id/remove', removeFoodItem)  // delete method could have been used but was omitted for simplicity.
 router.patch('/:id/update', updateMeal)
 router.get('/recommend/:calorieRequirement', recommendMeal)
 

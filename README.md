@@ -1,6 +1,19 @@
 # Meal Planner Backend API
 
+### Description
+
+This is a simple application using Nodejs, Express and MongoDB.
+Using this API one can make optimised meal plans for users.
+
+## Setup and Installation
+
+* Install [Node JS](https://nodejs.org/en/download/) version 8.15.0 or higher.
+* No need for `npm install`.
+* Replace the placeholder text in `backend/.env` with your mongoDB ATLAS connection string.
+* `npm start` in the `backend` directory will start the server.
+
 ### End Points:
+
 * POST
     * `/api/food-item/add` to add a `foodItem` in the database
     * `/api/meal/make` to add a `meal` in the database
@@ -21,6 +34,7 @@
 
 
 ### Points to note
+
 * The api returns json data which has only one of `msg`, `err` and `id` as key.
 * The **meal recommendation** function is *intentionally* made very **random** because no one likes eating the same meal everyday.
 * Since the meal recommendation function was made keeping *randomness* in mind, it would therefore produce *better* results with more `foodItems` in the database.
@@ -28,6 +42,7 @@
 * Since the `meal` model had no mention of the `quantity` of `foodItem`s, I did not impliment fractional quantities and stuck to whole numbers for the meal recommendation function.
 * Each occurance of a `foodItem` in the `foodItems` array of `meal` represents a whole `foodItem`.
 * The recommended `meal` is created considering the `itemWeight` of the `foodItem` and not *100 grams* of it.
+* Although, I have tried to keep `name` property unique (in all 3 models). I have not used it to find objects (I used `_id`) since I have not imposed `names` to be unique (in any of the 3 models). 
 * I added some extra routes and functions to the project that might come in handy. These are the functionalities they provide.
     * editing a `foodItem`'s properties
     * adding `foodItem`s to `meal`s
@@ -41,6 +56,7 @@
     * It makes the algorithm slower and hence can be erradicated in some use cases.
 
 ### Example *cURL* commands to add/update data
+
 * To add a new `foodItem`
 ```bash
 curl -XPOST http://localhost:5000/api/food-item/add \
@@ -132,6 +148,7 @@ curl -XPOST http://localhost:5000/api/user/remove/62e07141354d0cf26563b92e/2022-
 ```
 
 ### *The cURL commands I used to add `foodItems` into the database*
+
 P.S. These might help you set up the database quicker.
 ```bash
 curl -XPOST http://localhost:5000/api/food-item/add -H "Content-Type: application/json" -d '{"name": "milk", "calories": 65, "protein": 3.3, "carb": 5, "fat": 4, "acceptedUnits": ["mililiter", "grams"], "itemWeight": 100}'

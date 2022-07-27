@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const Meal = require('../models/meal')
 const FoodItem = require('../models/foodItem')
 
+const validMealCategories = ["Breakfast", "Lunch", "Evening Snack", "Dinner"]  // valid meal categories as specified in the meal model
+
 function error404(res) { res.status(404).json({ err: 'No such Meal' }) }  // for 404 messages
 
 async function makeMeal(req, res) {
@@ -35,7 +37,7 @@ async function addFoodItem(req, res) {
         const meal = await Meal.findById(id)
         if (!meal) { return error404(res) }
         meal.foodItems.push(foodItem)
-        meal.save()
+        await meal.save()
         res.status(200).json({ msg: "Added food item to Meal" })
     } catch (error) {
         res.status(400).json({ err: error.message })
@@ -50,17 +52,16 @@ async function removeFoodItem(req, res) {
         if (!mongoose.Types.ObjectId.isValid(foodItem)) { return res.status(400).json({ err: "not a valid foodItem" }) }
         const meal = await Meal.findById(id)
         if (!meal) { return error404(res) }
-        const index = meal.foodItems.indexOf(foodItem);
+        const index = meal.foodItems.indexOf(foodItem)
         if (index == -1) { return res.status(400).json({ err: "foodItem not in the meal" }) }
         meal.foodItems.splice(index, 1)
-        meal.save()
+        await meal.save()
         res.status(200).json({ msg: "Removed food item from Meal" })
     } catch (error) {
         res.status(400).json({ err: error.message })
     }
 }
 
-const validMealCategories = ["Breakfast", "Lunch", "Evening Snack", "Dinner"]  // valid meal categories as specified in the meal model
 function conditionSatisfied(calorieRequirement, totalCalories, totalProtein) {
     return (
         ((calorieRequirement - 100) <= totalCalories) &&
@@ -154,7 +155,7 @@ async function recommendMeal(req, res) {
                 let { calories, protein, itemWeight } = removeFoodItem
                 totalProtein -= (protein * itemWeight / 100)
                 totalCalories -= (calories * itemWeight / 100)
-                const index = foodItems.indexOf(removeFoodItem);
+                const index = foodItems.indexOf(removeFoodItem)
                 foodItems.splice(index, 1)
                 removeFoodItem = null
             } // Removing the foodItem from the meal

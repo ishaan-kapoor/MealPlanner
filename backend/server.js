@@ -19,12 +19,13 @@ app.use('/api/user/', require('./routes/user'))
 // main
 mongoose.connect(DB_URI)
     .then(() => {
-        console.log('connected to db')
+        console.log('connected to DataBase')
         app.listen(PORT, () => {
             console.log('listening on port:', PORT)
         })
     })
     .catch((error) => {
-        console.log('could not connect to db')
+        console.log('could not connect to DataBase\n')
         console.log(error)
+        console.log('\ncould not connect to DataBase')
     })

@@ -42,7 +42,7 @@ async function updateMealPlan(req, res) {
         date = new Date(date)
         mealObject = user.mealPlan.find(obj => { return obj.date.getTime() === date.getTime() })
         mealObject.meals = meals
-        user.save()
+        await user.save()
         res.status(200).json({ msg: "Updated meal plan for given date" })
     } catch (error) {
         res.status(400).json({ err: error.message })
@@ -58,7 +58,7 @@ async function addDate(req, res) {
         if (!user) { return error404(res) }
         date = new Date(date)
         user.mealPlan.push({ "date": date, "meals": [] })
-        user.save()
+        await user.save()
         res.status(200).json({ msg: "Added date to the meal plan" })
     } catch (error) {
         res.status(400).json({ err: error.message })
@@ -74,10 +74,10 @@ async function removeDate(req, res) {
         if (!user) { return error404(res) }
         date = new Date(date)
         mealObject = user.mealPlan.find(obj => { return obj.date.getTime() === date.getTime() })
-        const index = user.mealPlan.indexOf(mealObject);
+        const index = user.mealPlan.indexOf(mealObject)
         if (index == -1) { return res.status(400).json({ err: "date not in the meal plan" }) }
         user.mealPlan.splice(index, 1)
-        user.save()
+        await user.save()
         res.status(200).json({ msg: "Removed date from the meal plan" })
     } catch (error) {
         res.status(400).json({ err: error.message })
@@ -95,7 +95,7 @@ async function addMeal(req, res) {
         mealObject = user.mealPlan.find(obj => { return obj.date.getTime() === date.getTime() })
         if (!(mealObject)) { return error404(res) }
         mealObject.meals.push(meal)
-        user.save()
+        await user.save()
         res.status(200).json({ msg: "Added meal to the meal plan for given date" })
     } catch (error) {
         res.status(400).json({ err: error.message })
@@ -112,10 +112,10 @@ async function removeMeal(req, res) {
         date = new Date(date)
         mealObject = user.mealPlan.find(obj => { return obj.date.getTime() === date.getTime() })
         if (!(mealObject)) { return error404(res) }
-        const index = mealObject.meals.indexOf(meal);
+        const index = mealObject.meals.indexOf(meal)
         if (index == -1) { return res.status(400).json({ err: "meal not in the meal plan" }) }
         mealObject.meals.splice(index, 1)
-        user.save()
+        await user.save()
         res.status(200).json({ msg: "Removed meal from the meal plan for given date" })
     } catch (error) {
         res.status(400).json({ err: error.message })
